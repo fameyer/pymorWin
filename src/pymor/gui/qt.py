@@ -189,7 +189,7 @@ def launch_qt_app(main_window_factory, block):
         main_window.show()
         app.exec_()
 
-    if block:
+    if True:
         doit()
     else:
         from multiprocessing import Process

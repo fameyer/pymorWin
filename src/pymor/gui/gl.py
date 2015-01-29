@@ -246,7 +246,8 @@ if HAVE_ALL:
             self.setMinimumSize(max(self.vmin_width, self.vmax_width) + 20, 300)
             self.update()
 
-        def paintGL(self):
+        def paintEvent(self, event):
+            self.makeCurrent()
             gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
             gl.glUseProgram(self.shaders_program)
 
@@ -260,6 +261,7 @@ if HAVE_ALL:
                 gl.glVertex(-0.5, (bar_height*y + bar_start), y)
                 gl.glVertex(0.5, (bar_height*y + bar_start), y)
             gl.glEnd()
+
             p = QPainter(self)
             p.drawText((self.width() - self.vmax_width)/2, self.text_ascent, self.vmax_str)
             p.drawText((self.width() - self.vmin_width)/2, self.height() - self.text_height + self.text_ascent,

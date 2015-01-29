@@ -15,8 +15,8 @@ except ImportError:
     import pickle as pickle
 
 
-dump = partial(pickle.dump, protocol=-1)
-dumps = partial(pickle.dumps, protocol=-1)
+dump = partial(pickle.dump, protocol=0)
+dumps = partial(pickle.dumps, protocol=0)
 load = pickle.load
 loads = pickle.loads
 PicklingError = pickle.PicklingError

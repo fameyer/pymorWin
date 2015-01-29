@@ -161,6 +161,7 @@ class SQLiteRegion(CacheRegion):
             return False, None
         elif len(result) == 1:
             file_path = os.path.join(self.path, result[0][0])
+            file_path = file_path[0:2]  + file_path[2:].replace(':', '-')
             with open(file_path) as f:
                 value = load(f)
             return True, value
@@ -170,19 +171,21 @@ class SQLiteRegion(CacheRegion):
     def set(self, key, value):
         key = base64.b64encode(key)
         now = datetime.datetime.now()
-        filename = now.isoformat() + '.dat'
+        filename = (now.isoformat() + '.dat').replace(':', '-')
         file_path = os.path.join(self.path, filename)
         while os.path.exists(file_path):
             now = now + datetime.timedelta(microseconds=1)
             filename = now().isoformat()
             file_path = os.path.join(self.path, filename)
-        fd = os.open(file_path, os.O_WRONLY | os.O_EXCL | os.O_CREAT)
-        try:
-            f = os.fdopen(fd, 'w')
+        #fd  = os.open(file_path, os.O_WRONLY | os.O_EXCL | os.O_CREAT)
+        with open(file_path, 'wb') as f:
+#        fd = os.open(file_path, os.O_WRONLY | os.O_EXCL | os.O_CREAT)
+#        try:
+#            f = os.fdopen(fd, 'w')
             dump(value, f)
             file_size = f.tell()
-        finally:
-            f.close()
+#        finally:
+#            f.close()
         conn = self.conn
         c = conn.cursor()
         try:
